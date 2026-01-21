@@ -33,6 +33,11 @@ export interface Customer {
   email?: string;
   address?: string;
   company_name?: string;
+  account_manager_id?: number;
+  sales_employees?: {
+    full_name: string;
+    employee_code: string;
+  };
 }
 
 export interface ProductGroup {

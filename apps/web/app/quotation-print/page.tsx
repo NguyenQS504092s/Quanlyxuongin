@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { QuotationPdfData, QuotationTemplate } from '@/components/features/leads/QuotationTemplate';
 import { supabase } from '@/lib/supabase';
 
-export default function QuotationPrintPage() {
+function QuotationPrintContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get('key') || '';
   const qidRaw = searchParams.get('qid') || '';
@@ -224,3 +224,10 @@ export default function QuotationPrintPage() {
   );
 }
 
+export default function QuotationPrintPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 p-8 flex items-center justify-center"><div className="text-gray-500">Đang tải...</div></div>}>
+      <QuotationPrintContent />
+    </Suspense>
+  );
+}

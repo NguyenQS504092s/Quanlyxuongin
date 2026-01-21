@@ -889,12 +889,12 @@ function LeadsPageContent() {
               account_manager_id: leadRow.assigned_sales_id ?? null,
             },
           ])
-          .select('id, customer_code')
+          .select('id, customer_code, full_name, email, original_lead_id, account_manager_id')
           .single();
 
         if (createCustomerErr) throw createCustomerErr;
         customer = newCustomer;
-      } else {
+      } else if (existingCustomer) {
         // Cập nhật thông tin khách hàng nếu đã tồn tại (điền từ lead)
         const updateData: any = {};
         if (leadRow.full_name && leadRow.full_name !== existingCustomer.full_name) {
@@ -909,13 +909,13 @@ function LeadsPageContent() {
         if (!existingCustomer.original_lead_id && leadRow.id) {
           updateData.original_lead_id = leadRow.id;
         }
-        
+
         if (Object.keys(updateData).length > 0) {
           const { error: updateCustomerErr } = await supabase
             .from('customers')
             .update(updateData)
-            .eq('id', customer.id);
-          
+            .eq('id', existingCustomer.id);
+
           if (updateCustomerErr) {
             console.warn('Failed to update customer:', updateCustomerErr);
             // Không throw error, tiếp tục với customer hiện tại

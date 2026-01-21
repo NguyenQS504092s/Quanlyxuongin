@@ -31,6 +31,10 @@ interface Customer {
   full_name: string;
   phone: string;
   email?: string;
+  sales_employees?: {
+    full_name: string;
+    employee_code: string;
+  };
 }
 
 interface SalesEmployee {
